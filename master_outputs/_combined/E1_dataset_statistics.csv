@@ -1,0 +1,3 @@
+site,sessions_raw_file,sessions_in_test_year,days_with_sessions,sessions_per_day_mean,sessions_per_weekday_mean,peak_concurrent_EVs,energy_kwh_total,energy_kwh_mean,dwell_h_median,share_energy_clipped_to_feasible_pct,first_arrival,last_arrival
+caltech,20377,19977,365,54.7,64.2,51,215238.2,10.77,4.81,15.72,2019-01-01 09:41:48,2019-12-31 14:28:08
+jpl,17076,17045,352,48.4,64.8,52,252899.5,14.84,8.38,5.05,2019-01-01 17:00:51,2019-12-31 14:17:16

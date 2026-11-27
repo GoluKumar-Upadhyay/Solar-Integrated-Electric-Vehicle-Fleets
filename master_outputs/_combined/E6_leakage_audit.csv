@@ -1,0 +1,9 @@
+site,target,horizon,horizon_steps,min_feature_lag_steps,n_features,ok
+caltech,pv,1h,4,4,28,True
+caltech,pv,day_ahead,96,96,25,True
+caltech,load,1h,4,4,23,True
+caltech,load,day_ahead,96,96,21,True
+jpl,pv,1h,4,4,28,True
+jpl,pv,day_ahead,96,96,25,True
+jpl,load,1h,4,4,23,True
+jpl,load,day_ahead,96,96,21,True

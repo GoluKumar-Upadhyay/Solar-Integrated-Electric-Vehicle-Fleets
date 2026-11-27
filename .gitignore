@@ -1,0 +1,15 @@
+# Keep the GitHub upload to an explicit allowlist.
+# Everything else (datasets, conference work, other notebooks, and intermediates) is excluded.
+/*
+
+# Repository guidance and the requested executable sources
+!/.gitignore
+!/README.md
+!/LICENSE
+!/master.ipynb
+!/download_inputs.py
+!/acn_timeseries_to_sessions.py
+
+# Requested experiment outputs (tables, figures, and summary files)
+!/master_outputs/
+!/master_outputs/**

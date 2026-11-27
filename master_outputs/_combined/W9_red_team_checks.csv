@@ -1,0 +1,30 @@
+check,result,detail
+Data mode is real,PASS,REAL DATA
+No forecast feature closer than horizon (leakage),PASS,"[{'site': 'caltech', 'target': 'pv', 'horizon': '1h', 'min_feature_lag_steps': 4, 'horizon_steps': 4}, {'site': 'caltech', 'target': 'pv', 'horizon': 'day_ahead', 'min_feature_lag_steps': 96, 'horizon_steps': 96}, {'site': 'caltech', 'target': 'load', 'horizon': '1h', 'min_feature_lag_steps': 4, 'horizon_steps': 4}, {'site': 'caltech', 'target': 'load', 'horizon': 'day_ahead', 'min_feature_lag_steps': 96, 'horizon_steps': 96}, {'site': 'jpl', 'target': 'pv', 'horizon': '1h', 'min_feature_lag_steps': 4, 'horizon_steps': 4}, {'site': 'jpl', 'target': 'pv', 'horizon': 'day_ahead', 'min_feature_lag_steps': 96, 'horizon_steps': 96}, {'site': 'jpl', 'target': 'load', 'horizon': '1h', 'min_feature_lag_steps': 4, 'horizon_steps': 4}, {'site': 'jpl', 'target': 'load', 'horizon': 'day_ahead', 'min_feature_lag_steps': 96, 'horizon_steps': 96}]"
+Train < calibration < test (chronological),PASS,2017-01-01 00:00..2018-09-30 23:45 | 2018-10-01 00:00..2018-12-31 23:45 | 2019-01-01 00:00..2019-12-31 23:45
+Load normalization uses training data only,PASS,norm = max(load) over the training period (site_arrays)
+[caltech] sessions are real and on real dates,PASS,"19977 sessions, 64.2/weekday, peak 51 concurrent"
+[caltech] network limit actually binds for the proposed method,FAIL,"binding in 0.1% of decision steps (if ~0, use a stress-test setting as the main case)"
+[caltech] AC screening margin larger than LinDistFlow error,PASS,max error 0.0008 p.u. vs margin 0.01
+[caltech] LP never failed,PASS,0 fallbacks to EDF
+[caltech] offline optimum is not beaten on cost at equal energy (sanity),PASS,proposed 0.0293 $/kWh @ 100.00% vs offline 0.0255 @ 100.00%
+[jpl] sessions are real and on real dates,PASS,"17045 sessions, 64.8/weekday, peak 52 concurrent"
+[jpl] network limit actually binds for the proposed method,FAIL,"binding in 0.1% of decision steps (if ~0, use a stress-test setting as the main case)"
+[jpl] AC screening margin larger than LinDistFlow error,PASS,max error 0.0008 p.u. vs margin 0.01
+[jpl] LP never failed,FAIL,7 fallbacks to EDF
+[jpl] offline optimum is not beaten on cost at equal energy (sanity),PASS,proposed 0.0380 $/kWh @ 100.00% vs offline 0.0359 @ 100.00%
+Same constraints for all controlled online methods,PASS,"every method calls Feeder.ev_cap_kw with the same bounds; only mpc_point uses point bounds (by design, documented)"
+Main conformal mode fixed a priori,PASS,MAIN_CONFORMAL_MODE=rolling
+"ADMM converges to the centralized LP optimum (tight tolerance, p95 gap < 1% of energy value)",PASS,"tight eps=0.0001: median 0.0138%, p95 0.9974% | simulation eps=0.001: p95 0.3234%"
+[caltech] decentralized result matches centralized MPC with the same information (|cost diff| < 5%),FAIL,"proposed 0.0293 vs MPC-conformal 0.0314 $/kWh (-6.66%), energy 100.000% vs 100.000%"
+[jpl] decentralized result matches centralized MPC with the same information (|cost diff| < 5%),FAIL,"proposed 0.0380 vs MPC-conformal 0.0402 $/kWh (-5.36%), energy 100.000% vs 100.000%"
+[caltech] few sessions clipped to the feasible energy,FAIL,15.7% of sessions asked for more than rmax x dwell (check EVSE_MAX_KW / peak power)
+[caltech] a constrained regime is evaluated (stress or hub binding > 1%),PASS,"max binding share: stress 20.4%, hub 18.6%"
+[jpl] few sessions clipped to the feasible energy,FAIL,5.0% of sessions asked for more than rmax x dwell (check EVSE_MAX_KW / peak power)
+[jpl] a constrained regime is evaluated (stress or hub binding > 1%),PASS,"max binding share: stress 41.1%, hub 47.3%"
+Feeder voltage limit binds in at least one evaluated scenario,PASS,"hub min voltage 0.9460 p.u.; voltage-violation steps by method: {'admm_conformal': 48, 'edf': 56, 'mpc_conformal': 77, 'mpc_point': 346, 'offline_opt': 0}"
+[caltech] edge over centralized MPC survives tight ADMM tolerance (else claim equivalence only),PASS,"tight: 0.0294 $/kWh, 0.50 h | MPC-conformal: 0.0314, 2.75 h | saturation share MPC 1.7% vs ADMM 0.2%"
+[jpl] edge over centralized MPC survives tight ADMM tolerance (else claim equivalence only),PASS,"tight: 0.0385 $/kWh, 20.00 h | MPC-conformal: 0.0402, 37.00 h | saturation share MPC 16.5% vs ADMM 0.7%"
+Tariff values are the real cited tariff (not the placeholder 0.10/0.13/0.25),PASS,"distinct prices in the test year ($/MWh): [np.float64(57.8), np.float64(60.6), np.float64(65.8), np.float64(102.2)]"
+"Statistics use paired days, block bootstrap, permutation test, Holm, equivalence tolerance",PASS,"block=7 days, n_boot=5000"
+Sites share weather/grid inputs (must be disclosed),PASS,Caltech & JPL: same CAISO load/price; NSRDB cells ~7 km apart
